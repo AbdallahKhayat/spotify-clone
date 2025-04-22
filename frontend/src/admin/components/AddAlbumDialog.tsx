@@ -30,7 +30,7 @@ const AddAlbumDialog = () => {
     releaseYear: "",
   });
 
-  const [files, setFiles] = useState<{
+  const [imageFile, setImageFile] = useState<{
     image: File | null;
   }>({
     image: null,
@@ -41,7 +41,7 @@ const AddAlbumDialog = () => {
     setIsLoading(true);
 
     try {
-      if (!files.image) {
+      if (!imageFile.image) {
         return toast.error("Please upload image files");
       }
       const formData = new FormData();
@@ -49,7 +49,7 @@ const AddAlbumDialog = () => {
       formData.append("artist", newAlbum.artist);
       formData.append("releaseYear", newAlbum.releaseYear);
 
-      formData.append("imageFile", files.image);
+      formData.append("imageFile", imageFile.image);
 
       await axiosInstance.post("/admin/albums", formData, {
         headers: {
@@ -62,7 +62,7 @@ const AddAlbumDialog = () => {
         releaseYear: "",
       });
 
-      setFiles({
+      setImageFile({
         image: null,
       });
       toast.success("Album added successfully");
@@ -85,8 +85,10 @@ const AddAlbumDialog = () => {
 
       <DialogContent className="bg-zinc-900 border-zinc-700 max-h-[80vh] overflow-auto">
         <DialogHeader>
-          <DialogTitle>Add New Song</DialogTitle>
-          <DialogDescription>Add a new song to your library</DialogDescription>
+          <DialogTitle>Add New Album</DialogTitle>
+          <DialogDescription>
+            Add a new album to your collection
+          </DialogDescription>
         </DialogHeader>
 
         <input
@@ -95,7 +97,8 @@ const AddAlbumDialog = () => {
           ref={imageInputRef}
           hidden
           onChange={
-            (e) => setFiles((prev) => ({ ...prev, image: e.target.files![0] })) // update state of image files
+            (e) =>
+              setImageFile((prev) => ({ ...prev, image: e.target.files![0] })) // update state of image files
           }
         />
 
@@ -106,11 +109,11 @@ const AddAlbumDialog = () => {
           onClick={() => imageInputRef.current?.click()}
         >
           <div className="text-center">
-            {files.image ? (
+            {imageFile.image ? (
               <div className="space-y-2">
                 <div className="text-sm text-emerald-500">Image selected:</div>
                 <div className="text-xs text-zinc-400">
-                  {files.image.name.slice(0, 20)}
+                  {imageFile.image.name.slice(0, 20)}
                 </div>
               </div>
             ) : (
