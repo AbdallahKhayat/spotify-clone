@@ -85,7 +85,7 @@ if (process.env.NODE_ENV === "production") {
   //whenever the user visits any route other than /api/*
 
   //send index.htm file which will come in production under dist
-  app.get("*", (req, res) => {
+  app.get("/{*any}", (req, res) => {
     res.sendFile(path.resolve(__dirname, "../frontend/dist/index.html"));
   });
 }
