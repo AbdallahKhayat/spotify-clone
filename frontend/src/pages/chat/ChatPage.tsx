@@ -9,6 +9,13 @@ import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarImage } from "@/components/ui/avatar";
 import MessageInput from "./components/MessageInput";
 
+const formatTime = (date: string) => {
+  return new Date(date).toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+};
 const ChatPage = () => {
   const { user } = useUser();
   const { messages, selectedUser, fetchUsers, fetchMessages } = useChatStore();
@@ -71,7 +78,7 @@ const ChatPage = () => {
                       >
                         <p className="text-sm">{message.content}</p>
                         <span className="text-xs text-zinc-300 mt-1 block">
-                          {message.createdAt.split("T")[0]}
+                          {formatTime(message.createdAt)}
                         </span>
                       </div>
                     </div>
