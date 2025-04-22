@@ -7,6 +7,7 @@ import ChatHeader from "./components/ChatHeader";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarImage } from "@/components/ui/avatar";
+import MessageInput from "./components/MessageInput";
 
 const ChatPage = () => {
   const { user } = useUser();
@@ -48,13 +49,14 @@ const ChatPage = () => {
                         message.senderId === user?.id ? "flex-row-reverse" : ""
                       } `}
                     >
-                      <Avatar className="size-8">
+                      <Avatar className="size-8 ">
                         <AvatarImage
                           src={
                             message.senderId === user?.id
                               ? user.imageUrl
                               : selectedUser?.imageUrl
                           }
+                          className="rounded-full"
                         />
                       </Avatar>
 
@@ -78,6 +80,7 @@ const ChatPage = () => {
               </ScrollArea>
 
               {/* Chat Input */}
+              <MessageInput />
             </>
           ) : (
             <NoConversationPlaceholder />
