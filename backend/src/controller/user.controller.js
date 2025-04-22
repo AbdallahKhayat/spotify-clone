@@ -1,4 +1,5 @@
 import { User } from "../models/user.model.js";
+
 export const getAllUsers = async (req, res, next) => {
   try {
     //find all users but not myself so we use this method
