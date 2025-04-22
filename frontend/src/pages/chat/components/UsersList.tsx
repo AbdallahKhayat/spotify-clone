@@ -2,7 +2,6 @@ import UsersListSkeleton from "@/components/skeletons/UsersListSkeletion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useChatStore } from "@/stores/useChatStore";
-import { User } from "lucide-react";
 
 const UsersList = () => {
   const { isLoading, users, selectedUser, setSelectedUser, onlineUsers } =
