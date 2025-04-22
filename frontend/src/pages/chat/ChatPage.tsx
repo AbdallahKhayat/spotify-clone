@@ -3,6 +3,7 @@ import { useChatStore } from "@/stores/useChatStore";
 import { useUser } from "@clerk/clerk-react";
 import { useEffect } from "react";
 import UsersList from "./components/UsersList";
+import ChatHeader from "./components/ChatHeader";
 
 const ChatPage = () => {
   const { user } = useUser();
@@ -26,10 +27,37 @@ const ChatPage = () => {
         {/* Left Side usersList */}
         <UsersList />
 
-        {/* Right Side Chat */}
+        {/* Right Side Chat: Chat Messages container */}
+
+        <div className="flex flex-col h-full">
+          {selectedUser ? (
+            <>
+              {/* Chat Header */}
+              <ChatHeader />
+
+              {/* Chat Container: Messages we will use ScrollArea component */}
+
+              {/* Chat Input */}
+            </>
+          ) : (
+            <NoConversationPlaceholder />
+          )}
+        </div>
       </div>
     </main>
   );
 };
 
 export default ChatPage;
+
+const NoConversationPlaceholder = () => (
+  <div className="flex flex-col items-center justify-center h-full space-y-6">
+    <img src="/spotify.png" alt="Spotify" className="size-16 animate-bounce" />
+    <div className="text-center">
+      <h3 className="text-zinc-300 text-lg font-medium mb-1">
+        No conversation selected
+      </h3>
+      <p className="text-zinc-500 text-sm">Choose a friend to start chatting</p>
+    </div>
+  </div>
+);
