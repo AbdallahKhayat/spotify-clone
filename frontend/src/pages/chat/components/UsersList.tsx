@@ -21,7 +21,7 @@ const UsersList = () => {
                   key={user._id}
                   onClick={() => setSelectedUser(user)}
                   className={`flex items-center justify-center lg:justify-start gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
-                    selectedUser?._id === user._id
+                    selectedUser?.clerkId === user.clerkId
                       ? "bg-zinc-800"
                       : "hover:bg-zinc-800/50"
                   } `}

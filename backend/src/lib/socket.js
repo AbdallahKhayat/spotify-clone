@@ -78,7 +78,7 @@ export const initializeSocket = (server) => {
       for (const [userId, socketId] of userSockets.entries()) {
         // find disconnected user
         if (socketId === socket.id) {
-          disconnectedUserId = socketId;
+          disconnectedUserId = userId;
           // delete user and user activities
           userSockets.delete(userId);
           userActivities.delete(userId);
