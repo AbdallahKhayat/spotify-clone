@@ -24,7 +24,8 @@ interface ChatStore {
 }
 
 //connect to the Socket server that we created
-const baseUrl = "http://localhost:5000";
+const baseUrl =
+  import.meta.env.MODE === "development" ? "http://localhost:5000" : "/";
 
 const socket = io(baseUrl, {
   autoConnect: false, // we dont want to connect automatically , only connect if user is authenticated
