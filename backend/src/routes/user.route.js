@@ -7,6 +7,6 @@ const router = Router();
 router.get("/", protectRoute, getAllUsers);
 
 // TODO: get Messages between two users
-// router.get("messages/:userId", protectRoute, getMessages);
+router.get("messages/:userId", protectRoute, getMessages);
 
 export default router;
