@@ -4,7 +4,7 @@ import { Message, User } from "@/types";
 import { create } from "zustand";
 import { io } from "socket.io-client";
 interface ChatStore {
-  users: any[];
+  users: User[];
   isLoading: boolean;
   error: string | null;
   socket: any;
@@ -68,7 +68,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       socket.emit("user_connected", userId);
 
       // update onlineUsers set when a user comes online
-      socket.on("user_online", (users: string[]) => {
+      socket.on("users_online", (users: string[]) => {
         set({ onlineUsers: new Set(users) });
       });
 
