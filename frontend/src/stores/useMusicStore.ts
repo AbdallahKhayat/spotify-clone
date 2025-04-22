@@ -1,5 +1,6 @@
 import { axiosInstance } from "@/lib/axios";
 import { Album, Song, Stats } from "@/types";
+import toast from "react-hot-toast";
 import { create } from "zustand";
 
 //to handle suggestions only
@@ -21,6 +22,9 @@ interface MusicStore {
   fetchTrendingSongs: () => Promise<void>;
   fetchStats: () => Promise<void>;
   fetchSongs: () => Promise<void>;
+
+  deleteSong: (id: string) => Promise<void>;
+  deleteAlbum: (id: string) => Promise<void>;
 }
 
 export const useMusicStore = create<MusicStore>((set) => ({
@@ -123,6 +127,50 @@ export const useMusicStore = create<MusicStore>((set) => ({
       set({ stats: response.data });
     } catch (error: any) {
       set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  deleteSong: async (id) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      await axiosInstance.delete(`/admin/songs/${id}`);
+
+      //remove the song from the state by using filter
+      set((state) => ({
+        songs: state.songs.filter((song) => song._id !== id),
+      }));
+
+      toast.success("Song deleted successfully");
+    } catch (error: any) {
+      toast.error("Error deleting the song", error);
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  deleteAlbum: async (id) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      await axiosInstance.delete(`/admin/albums/${id}`);
+
+      //remove the song from the state by using filter
+      set((state) => ({
+        albums: state.albums.filter((album) => album._id !== id),
+        //delete album songs too
+        songs: state.songs.map((song) =>
+          song.albumId === state.albums.find((album) => album._id === id)?.title
+            ? { ...song, albumId: null }
+            : song
+        ),
+      }));
+
+      toast.success("Album deleted successfully");
+    } catch (error: any) {
+      toast.error("Error deleting the album", error);
     } finally {
       set({ isLoading: false });
     }

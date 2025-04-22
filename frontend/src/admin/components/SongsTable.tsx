@@ -11,7 +11,7 @@ import { useMusicStore } from "@/stores/useMusicStore";
 import { Calendar, Trash2 } from "lucide-react";
 
 const SongsTable = () => {
-  const { songs, isLoading, error } = useMusicStore();
+  const { songs, isLoading, error, deleteSong } = useMusicStore();
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-8">
@@ -27,6 +27,7 @@ const SongsTable = () => {
       </div>
     );
   }
+
   return (
     <Table>
       <TableHeader>
@@ -62,7 +63,7 @@ const SongsTable = () => {
                   variant={"ghost"}
                   size={"sm"}
                   className="text-red-400 hover:text-red-300 hover:bg-red-400/10"
-                  onClick={() => {}}
+                  onClick={() => deleteSong(song._id)}
                 >
                   <Trash2 className="size-4" />
                 </Button>
