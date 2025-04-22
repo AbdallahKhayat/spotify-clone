@@ -212,7 +212,7 @@ const AddSongDialog = () => {
           <div className="space-y-2">
             <label className="text-sm font-medium">Duration (Seconds)</label>
             <Input
-              type="numnber"
+              type="number"
               min="0"
               value={newSong.duration}
               onChange={(e) =>
