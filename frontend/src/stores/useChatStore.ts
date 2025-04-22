@@ -1,6 +1,6 @@
 // stores/useChatStore.ts
 import { axiosInstance } from "@/lib/axios";
-import { Message } from "@/types";
+import { Message, User } from "@/types";
 import { create } from "zustand";
 import { io } from "socket.io-client";
 interface ChatStore {
@@ -12,12 +12,15 @@ interface ChatStore {
   onlineUsers: Set<string>;
   userActivities: Map<string, string>;
   messages: Message[];
+  selectedUser: User | null;
 
   fetchUsers: () => Promise<void>;
 
   initSocket: (userId: string) => void; // to know which user is connecting
   disconnectSocket: () => void; // to let us become offline like closing browser
   sendMessage: (receiverId: string, senderId: string, content: string) => void; // to send messages
+  fetchMessages: (userId: string) => Promise<void>;
+  setSelectedUser: (user: User | null) => void;
 }
 
 //connect to the Socket server that we created
@@ -38,6 +41,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   onlineUsers: new Set(),
   userActivities: new Map(),
   messages: [],
+  selectedUser: null,
 
   fetchUsers: async () => {
     try {
@@ -55,7 +59,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }
   },
 
-  initSocket: (userId: string) => {
+  initSocket: (userId) => {
     if (!get().isConnected) {
       socket.auth = { userId }; // current authenticated userId
       socket.connect();
@@ -123,5 +127,31 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       set({ isConnected: false });
     }
   },
-  sendMessage: (receiverId: string, senderId: string, content: string) => {},
+  sendMessage: (receiverId, senderId, content) => {
+    const socket = get().socket;
+
+    if (!socket) {
+      return;
+    }
+    socket.emit("send_message", { receiverId, senderId, content });
+  },
+
+  //fetch messages based on userId
+  fetchMessages: async (userId) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const response = await axiosInstance.get(`users/messages/${userId}`);
+
+      set({ messages: response.data });
+    } catch (error: any) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  setSelectedUser: (user) => {
+    set({ selectedUser: user });
+  },
 }));
